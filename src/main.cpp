@@ -4,6 +4,12 @@
 #include <iostream>
 using namespace std;
 
+float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+};
+
 /**
  * 向glfw窗口注册的回调函数，窗口大小改变时，修改视口大小
  */
@@ -32,6 +38,16 @@ void doRenderLoop(GLFWwindow* window) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         // 状态使用函数，它使用上面这行设置的颜色来清屏
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // 使用ID生成VBO对象
+        unsigned int VBO;
+        glGenBuffers(1, &VBO);
+        // 顶点缓冲对象的缓冲类型是GL_ARRAY_BUFFER, 把对象绑定到这个缓冲类型
+        // 从这一刻路程，所有针对GL_ARRAY_BUFFER的调用都会用来配置这个VBO对象
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+        // 把之前定义的顶点数据，复制到当前绑定的缓冲区，即上面的VBO对象
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
