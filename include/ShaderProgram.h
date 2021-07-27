@@ -2,8 +2,12 @@
 #define __SHADERPROGRAM_H__
 
 #include <string>
+#include <vector>
 
 #include "Shader.h"
+
+using std::string;
+using std::vector;
 
 class ShaderProgram {
    public:
@@ -12,8 +16,9 @@ class ShaderProgram {
     void linkShader();
     bool ready(std::string& errInfo);
 
-    GLuint shaderProgram;
-    std::string shaderErrorInfo;
+    GLuint mShaderProgram;
+    string mShaderErrorInfo;
+    vector<Shader*> mShaders;
 };
 
 #endif  // __SHADERPROGRAM_H__

@@ -31,7 +31,7 @@ class FTriangleRenderer : public Renderer {
     }
 
     void doRender() {
-        glUseProgram(program.shaderProgram);
+        glUseProgram(program.mShaderProgram);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
@@ -40,21 +40,21 @@ class FTriangleRenderer : public Renderer {
     ShaderProgram program;
     GLuint VAO, VBO;
 
-    const char* vertexShaderSource =
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-        "}\0";
+    static constexpr auto vertexShaderSource = R"delimiter(
+                        #version 330 core
+                        layout (location = 0) in vec3 aPos;
+                        void main() {
+                            gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                        }
+                        )delimiter";
 
-    const char* fragmentShaderSource =
-        "#version 330 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(1.0f, 0.5f, 0.7f, 1.0f);\n"
-        "}\0";
+    static constexpr auto fragmentShaderSource = R"(
+                        #version 330 core
+                        out vec4 FragColor;
+                        void main() {
+                            FragColor = vec4(1.0f, 0.5f, 0.7f, 1.0f);
+                        }
+                        )";
 };
 
 #endif  // __FTRIANGLERENDERER_H__

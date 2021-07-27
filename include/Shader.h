@@ -13,12 +13,14 @@ class Shader {
    public:
     Shader(ShaderType type, std::string shaderSource);
 
+    void deleteShader();
+
     bool ready(std::string& errorInfo);
 
-    GLuint shader;
+    GLuint mShader;
 
    private:
-    ShaderType type;
+    ShaderType mType;
 
     GLenum convertType();
 };

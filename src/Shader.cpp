@@ -1,27 +1,27 @@
 #include "Shader.h"
 
-Shader::Shader(ShaderType type, std::string shaderSource) : type(type) {
-    shader = glCreateShader(convertType());
-    if (shader) {
+Shader::Shader(ShaderType type, std::string shaderSource) : mType(type) {
+    mShader = glCreateShader(convertType());
+    if (mShader) {
         const char* source = shaderSource.c_str();
-        glShaderSource(shader, 1, &source, NULL);
-        glCompileShader(shader);
+        glShaderSource(mShader, 1, &source, NULL);
+        glCompileShader(mShader);
     }
 }
 
 bool Shader::ready(std::string& errorInfo) {
     GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(mShader, GL_COMPILE_STATUS, &success);
     char info[512];
     if (!success) {
-        glGetShaderInfoLog(shader, 512, NULL, info);
+        glGetShaderInfoLog(mShader, 512, NULL, info);
         errorInfo = info;
     }
     return success;
 }
 
 GLenum Shader::convertType() {
-    switch (type) {
+    switch (mType) {
         case VERTEX: {
             return GL_VERTEX_SHADER;
         }
@@ -30,4 +30,9 @@ GLenum Shader::convertType() {
         }
     }
     return 0;
+}
+void Shader::deleteShader() {
+    if (mShader) {
+        glDeleteShader(mShader);
+    }
 }

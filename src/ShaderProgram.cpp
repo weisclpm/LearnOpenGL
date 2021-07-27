@@ -3,32 +3,36 @@
 #include <iostream>
 
 ShaderProgram::ShaderProgram() {
-    shaderProgram = glCreateProgram();
+    mShaderProgram = glCreateProgram();
 }
 
 void ShaderProgram::attachShader(Shader& shader) {
-    if (shaderProgram && shader.ready(shaderErrorInfo)) {
-        glAttachShader(shaderProgram, shader.shader);
+    if (mShaderProgram && shader.ready(mShaderErrorInfo)) {
+        glAttachShader(mShaderProgram, shader.mShader);
+        mShaders.push_back(&shader);
     }
 }
 
 void ShaderProgram::linkShader() {
-    if (shaderProgram) {
-        glLinkProgram(shaderProgram);
+    if (mShaderProgram) {
+        glLinkProgram(mShaderProgram);
+        for (auto shader : mShaders) {
+            shader->deleteShader();
+        }
     }
 }
 
 bool ShaderProgram::ready(std::string& errInfo) {
-    if(!shaderErrorInfo.empty()){
-        errInfo = shaderErrorInfo;
+    if (!mShaderErrorInfo.empty()) {
+        errInfo = mShaderErrorInfo;
         return false;
     }
 
     GLint success;
     char infoLog[512];
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(mShaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        glGetProgramInfoLog(mShaderProgram, 512, NULL, infoLog);
         errInfo = infoLog;
     }
     return success;
