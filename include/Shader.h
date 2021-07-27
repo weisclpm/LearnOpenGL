@@ -6,27 +6,16 @@
 
 using std::string;
 
-enum ShaderType {
-    VERTEX,    // 顶点着色器
-    FRAGMENT,  // 片段着色器
-};
-
 class Shader {
    public:
-    Shader(ShaderType type, string shaderName, string shaderSource);
+    Shader(string vertexSource, string fragmentSource);
 
-    void deleteShader();
+    void use();
 
-    bool ready();
-
-    GLuint mShader;
-
-    string mShaderName;
+    int getUniformLocation(string name);
 
    private:
-    ShaderType mType;
-
-    GLenum convertType();
+    GLuint mProgram;
 };
 
 #endif  // __SHADER_H__

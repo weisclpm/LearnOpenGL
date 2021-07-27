@@ -2,15 +2,11 @@
 #define __STRIANGLERENDERER_H__
 
 #include "Renderer.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 
 class STriangleRenderer : public Renderer {
    public:
-    STriangleRenderer() {
-        Shader shaderVertex(VERTEX, "SVertexShader", vertexShaderSource);
-        Shader shaderFragment(FRAGMENT, "SFragmentShader", fragmentShaderSource);
-        program.attachAndLinkShader({&shaderVertex, &shaderFragment});
-
+    STriangleRenderer() : mShader(Shader(sVertexShaderSource, sFragmentShaderSource)) {
         glGenBuffers(1, &VBO);
         glGenVertexArrays(1, &VAO);
 
@@ -32,18 +28,16 @@ class STriangleRenderer : public Renderer {
     }
 
     void doRender() {
-        if (program.ready()) {
-            glUseProgram(program.mShaderProgram);
-            glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-        }
+        mShader.use();
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
    private:
-    ShaderProgram program;
+    Shader mShader;
     GLuint VAO, VBO;
 
-    static constexpr auto vertexShaderSource = R"(
+    static constexpr auto sVertexShaderSource = R"(
                         #version 330 core
                         layout (location = 0) in vec3 aPos;
                         layout (location = 1) in vec3 aColor;
@@ -54,7 +48,7 @@ class STriangleRenderer : public Renderer {
                         }
                         )";
 
-    static constexpr auto fragmentShaderSource = R"(
+    static constexpr auto sFragmentShaderSource = R"(
                         #version 330 core
                         out vec4 FragColor;
                         in vec3 outColor;

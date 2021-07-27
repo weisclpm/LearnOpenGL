@@ -1,17 +1,14 @@
 #ifndef __FTRIANGLERENDERER_H__
 #define __FTRIANGLERENDERER_H__
 
-#include "Renderer.h"
-#include "ShaderProgram.h"
 #include <cmath>
+
+#include "Renderer.h"
+#include "Shader.h"
 
 class FTriangleRenderer : public Renderer {
    public:
-    FTriangleRenderer() {
-        Shader shaderVertex(VERTEX, "FVertexShader", vertexShaderSource);
-        Shader shaderFragment(FRAGMENT, "FFragmentShader", fragmentShaderSource);
-        program.attachAndLinkShader({&shaderVertex, &shaderFragment});
-
+    FTriangleRenderer() : mShader(Shader(sVertexShaderSource, sFragmentShaderSource)) {
         glGenBuffers(1, &VBO);
         glGenVertexArrays(1, &VAO);
 
@@ -30,23 +27,21 @@ class FTriangleRenderer : public Renderer {
     }
 
     void doRender() {
-        if (program.ready()) {
-            float timeValue = glfwGetTime();
-            float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-            int vertexColorLocation = glGetUniformLocation(program.mShaderProgram, "ourColor");
-            glUseProgram(program.mShaderProgram);
-            // 更新uniform之前必须先使用glUseProgram
-            glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-            glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-        }
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        int vertexColorLocation = mShader.getUniformLocation("ourColor");
+        mShader.use();
+        // 更新uniform之前必须先使用glUseProgram
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 
    private:
-    ShaderProgram program;
+    Shader mShader;
     GLuint VAO, VBO;
 
-    static constexpr auto vertexShaderSource = R"(
+    static constexpr auto sVertexShaderSource = R"(
                         #version 330 core
                         layout (location = 0) in vec3 aPos;
                         out vec4 outColor;
@@ -56,7 +51,7 @@ class FTriangleRenderer : public Renderer {
                         }
                         )";
 
-    static constexpr auto fragmentShaderSource = R"(
+    static constexpr auto sFragmentShaderSource = R"(
                         #version 330 core
                         out vec4 FragColor;
                         in vec4 outColor;
