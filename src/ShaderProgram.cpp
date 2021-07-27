@@ -7,7 +7,11 @@ ShaderProgram::ShaderProgram() {
 void ShaderProgram::attachAndLinkShader(initializer_list<Shader*> shaders) {
     if (mShaderProgram) {
         for (auto shader : shaders) {
-            glAttachShader(mShaderProgram, shader->mShader);
+            if (shader->ready()) {
+                glAttachShader(mShaderProgram, shader->mShader);
+            } else {
+                return;
+            }
         }
         glLinkProgram(mShaderProgram);
 
@@ -18,18 +22,13 @@ void ShaderProgram::attachAndLinkShader(initializer_list<Shader*> shaders) {
     }
 }
 
-bool ShaderProgram::ready(std::string& errInfo) {
-    if (!mShaderErrorInfo.empty()) {
-        errInfo = mShaderErrorInfo;
-        return false;
-    }
-
+bool ShaderProgram::ready() {
     GLint success;
     char infoLog[512];
     glGetProgramiv(mShaderProgram, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(mShaderProgram, 512, NULL, infoLog);
-        errInfo = infoLog;
+        cout << "ERROR::FAILED TO LINK SHADER PROGRAM: " << infoLog << endl;
     }
     return success;
 }

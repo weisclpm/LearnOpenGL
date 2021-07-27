@@ -4,6 +4,8 @@
 
 #include "GLEnv.h"
 
+using std::string;
+
 enum ShaderType {
     VERTEX,    // 顶点着色器
     FRAGMENT,  // 片段着色器
@@ -11,13 +13,15 @@ enum ShaderType {
 
 class Shader {
    public:
-    Shader(ShaderType type, std::string shaderSource);
+    Shader(ShaderType type, string shaderName, string shaderSource);
 
     void deleteShader();
 
-    bool ready(std::string& errorInfo);
+    bool ready();
 
     GLuint mShader;
+
+    string mShaderName;
 
    private:
     ShaderType mType;

@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-Shader::Shader(ShaderType type, std::string shaderSource) : mType(type) {
+Shader::Shader(ShaderType type, string shaderName, string shaderSource) : mType(type), mShaderName(shaderName) {
     mShader = glCreateShader(convertType());
     if (mShader) {
         const char* source = shaderSource.c_str();
@@ -9,13 +9,13 @@ Shader::Shader(ShaderType type, std::string shaderSource) : mType(type) {
     }
 }
 
-bool Shader::ready(std::string& errorInfo) {
+bool Shader::ready() {
     GLint success;
     glGetShaderiv(mShader, GL_COMPILE_STATUS, &success);
     char info[512];
     if (!success) {
         glGetShaderInfoLog(mShader, 512, NULL, info);
-        errorInfo = info;
+        cout << "ERROR::FAILED TO COMPILE SHADER - " << mShaderName << ": " << endl;
     }
     return success;
 }

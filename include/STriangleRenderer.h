@@ -7,8 +7,8 @@
 class STriangleRenderer : public Renderer {
    public:
     STriangleRenderer() {
-        Shader shaderVertex(VERTEX, vertexShaderSource);
-        Shader shaderFragment(FRAGMENT, fragmentShaderSource);
+        Shader shaderVertex(VERTEX, "SVertexShader", vertexShaderSource);
+        Shader shaderFragment(FRAGMENT, "SFragmentShader", fragmentShaderSource);
         program.attachAndLinkShader({&shaderVertex, &shaderFragment});
 
         glGenBuffers(1, &VBO);
@@ -29,9 +29,11 @@ class STriangleRenderer : public Renderer {
     }
 
     void doRender() {
-        glUseProgram(program.mShaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        if (program.ready()) {
+            glUseProgram(program.mShaderProgram);
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+        }
     }
 
    private:

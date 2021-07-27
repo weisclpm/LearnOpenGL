@@ -13,7 +13,7 @@ class ShaderProgram {
    public:
     ShaderProgram();
     void attachAndLinkShader(initializer_list<Shader*> shaders);
-    bool ready(std::string& errInfo);
+    bool ready();
 
     GLuint mShaderProgram;
     string mShaderErrorInfo;
