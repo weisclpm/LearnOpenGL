@@ -3,6 +3,7 @@
 
 #include "Renderer.h"
 #include "ShaderProgram.h"
+#include <cmath>
 
 class FTriangleRenderer : public Renderer {
    public:
