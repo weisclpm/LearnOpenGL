@@ -9,9 +9,7 @@ class FTriangleRenderer : public Renderer {
     FTriangleRenderer() {
         Shader shaderVertex(VERTEX, vertexShaderSource);
         Shader shaderFragment(FRAGMENT, fragmentShaderSource);
-        program.attachShader(shaderVertex);
-        program.attachShader(shaderFragment);
-        program.linkShader();
+        program.attachAndLinkShader({&shaderVertex, &shaderFragment});
 
         glGenBuffers(1, &VBO);
         glGenVertexArrays(1, &VAO);
@@ -40,13 +38,13 @@ class FTriangleRenderer : public Renderer {
     ShaderProgram program;
     GLuint VAO, VBO;
 
-    static constexpr auto vertexShaderSource = R"delimiter(
+    static constexpr auto vertexShaderSource = R"(
                         #version 330 core
                         layout (location = 0) in vec3 aPos;
                         void main() {
                             gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
                         }
-                        )delimiter";
+                        )";
 
     static constexpr auto fragmentShaderSource = R"(
                         #version 330 core

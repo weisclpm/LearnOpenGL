@@ -9,9 +9,7 @@ class STriangleRenderer : public Renderer {
     STriangleRenderer() {
         Shader shaderVertex(VERTEX, vertexShaderSource);
         Shader shaderFragment(FRAGMENT, fragmentShaderSource);
-        program.attachShader(shaderVertex);
-        program.attachShader(shaderFragment);
-        program.linkShader();
+        program.attachAndLinkShader({&shaderVertex, &shaderFragment});
 
         glGenBuffers(1, &VBO);
         glGenVertexArrays(1, &VAO);

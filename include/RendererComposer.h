@@ -25,6 +25,11 @@ class RendererComposer : public Renderer {
             renderer->doRender();
         }
     }
+    ~RendererComposer() {
+        for (auto renderer : renderers) {
+            delete renderer;
+        }
+    }
 
    private:
     vector<Renderer*> renderers;

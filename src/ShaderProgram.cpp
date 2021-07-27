@@ -1,22 +1,18 @@
 #include "ShaderProgram.h"
 
-#include <iostream>
-
 ShaderProgram::ShaderProgram() {
     mShaderProgram = glCreateProgram();
 }
 
-void ShaderProgram::attachShader(Shader& shader) {
-    if (mShaderProgram && shader.ready(mShaderErrorInfo)) {
-        glAttachShader(mShaderProgram, shader.mShader);
-        mShaders.push_back(&shader);
-    }
-}
-
-void ShaderProgram::linkShader() {
+void ShaderProgram::attachAndLinkShader(initializer_list<Shader*> shaders) {
     if (mShaderProgram) {
+        for (auto shader : shaders) {
+            glAttachShader(mShaderProgram, shader->mShader);
+        }
         glLinkProgram(mShaderProgram);
-        for (auto shader : mShaders) {
+
+        // 链接成功以后，可以删除创建的着色器
+        for (auto shader : shaders) {
             shader->deleteShader();
         }
     }

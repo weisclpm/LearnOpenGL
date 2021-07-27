@@ -2,23 +2,21 @@
 #define __SHADERPROGRAM_H__
 
 #include <string>
-#include <vector>
+#include <initializer_list>
 
 #include "Shader.h"
 
 using std::string;
-using std::vector;
+using std::initializer_list;
 
 class ShaderProgram {
    public:
     ShaderProgram();
-    void attachShader(Shader& shader);
-    void linkShader();
+    void attachAndLinkShader(initializer_list<Shader*> shaders);
     bool ready(std::string& errInfo);
 
     GLuint mShaderProgram;
     string mShaderErrorInfo;
-    vector<Shader*> mShaders;
 };
 
 #endif  // __SHADERPROGRAM_H__
