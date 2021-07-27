@@ -15,7 +15,7 @@ bool Shader::ready() {
     char info[512];
     if (!success) {
         glGetShaderInfoLog(mShader, 512, NULL, info);
-        cout << "ERROR::FAILED TO COMPILE SHADER - " << mShaderName << ": " << endl;
+        cout << "ERROR::FAILED TO COMPILE SHADER - " << mShaderName << ": " << info << endl;
     }
     return success;
 }

@@ -30,7 +30,12 @@ class FTriangleRenderer : public Renderer {
 
     void doRender() {
         if (program.ready()) {
+            float timeValue = glfwGetTime();
+            float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+            int vertexColorLocation = glGetUniformLocation(program.mShaderProgram, "ourColor");
             glUseProgram(program.mShaderProgram);
+            // 更新uniform之前必须先使用glUseProgram
+            glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
             glBindVertexArray(VAO);
             glDrawArrays(GL_TRIANGLES, 0, 3);
         }
@@ -43,16 +48,20 @@ class FTriangleRenderer : public Renderer {
     static constexpr auto vertexShaderSource = R"(
                         #version 330 core
                         layout (location = 0) in vec3 aPos;
+                        out vec4 outColor;
                         void main() {
-                            gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                            gl_Position = vec4(aPos.xyz, 1.0);
+                            outColor = vec4(0.5, 0.0, 0.0, 1.0);
                         }
                         )";
 
     static constexpr auto fragmentShaderSource = R"(
                         #version 330 core
                         out vec4 FragColor;
+                        in vec4 outColor;
+                        uniform vec4 ourColor;
                         void main() {
-                            FragColor = vec4(1.0f, 0.5f, 0.7f, 1.0f);
+                            FragColor = ourColor;
                         }
                         )";
 };
