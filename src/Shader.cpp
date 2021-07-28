@@ -9,9 +9,6 @@ void compileShader(GLuint shader, string source, string tag);
 void checkError(string type, GLuint object);
 
 Shader::Shader(string vertexSourcePath, string fragmentSourcePath) {
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
     std::ifstream vShaderFile, fShaderFile;
     // 保证ifstream对象可以抛出异常：
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -27,7 +24,9 @@ Shader::Shader(string vertexSourcePath, string fragmentSourcePath) {
 
         vShaderFile.close();
         fShaderFile.close();
-
+        
+        GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         compileShader(vertexShader, vStream.str(), "VERTEX");
         compileShader(fragmentShader, fStream.str(), "FRAGMENT");
 
