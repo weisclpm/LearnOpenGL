@@ -41,25 +41,9 @@ class FTriangleRenderer : public Renderer {
     Shader mShader;
     GLuint VAO, VBO;
 
-    static constexpr auto sVertexShaderSource = R"(
-                        #version 330 core
-                        layout (location = 0) in vec3 aPos;
-                        out vec4 outColor;
-                        void main() {
-                            gl_Position = vec4(aPos.xyz, 1.0);
-                            outColor = vec4(0.5, 0.0, 0.0, 1.0);
-                        }
-                        )";
+    static constexpr auto sVertexShaderSource = R"(../shader/TriangleVertex.vs)";
 
-    static constexpr auto sFragmentShaderSource = R"(
-                        #version 330 core
-                        out vec4 FragColor;
-                        in vec4 outColor;
-                        uniform vec4 ourColor;
-                        void main() {
-                            FragColor = ourColor;
-                        }
-                        )";
+    static constexpr auto sFragmentShaderSource = R"(../shader/FTriangleFragment.fs)";
 };
 
 #endif  // __FTRIANGLERENDERER_H__

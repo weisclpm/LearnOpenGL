@@ -8,7 +8,7 @@ using std::string;
 
 class Shader {
    public:
-    Shader(string vertexSource, string fragmentSource);
+    Shader(string vertexSourcePath, string fragmentSourcePath);
 
     void use();
 

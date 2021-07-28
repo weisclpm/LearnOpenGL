@@ -7,8 +7,8 @@ AUX_SOURCE_DIRECTORY(src DIR_SRCS)
 
 include_directories(include)
 
-# link_directories(lib)
-link_directories(libarm64)
+ link_directories(lib)
+#link_directories(libarm64)
 
 link_libraries(libglfw3.a)
 

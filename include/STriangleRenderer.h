@@ -37,24 +37,8 @@ class STriangleRenderer : public Renderer {
     Shader mShader;
     GLuint VAO, VBO;
 
-    static constexpr auto sVertexShaderSource = R"(
-                        #version 330 core
-                        layout (location = 0) in vec3 aPos;
-                        layout (location = 1) in vec3 aColor;
-                        out vec3 outColor;
-                        void main() {
-                            gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-                            outColor = aColor;
-                        }
-                        )";
+    static constexpr auto sVertexShaderSource = R"(../shader/TriangleVertex.vs)";
 
-    static constexpr auto sFragmentShaderSource = R"(
-                        #version 330 core
-                        out vec4 FragColor;
-                        in vec3 outColor;
-                        void main() {
-                            FragColor = vec4(outColor, 1.0f);
-                        }
-                        )";
+    static constexpr auto sFragmentShaderSource = R"(../shader/STriangleFragment.fs)";
 };
 #endif  // __STRIANGLERENDERER_H__

@@ -1,24 +1,49 @@
 #include "Shader.h"
 
+#include <fstream>
+#include <sstream>
+
+using std::ifstream;
+
 void compileShader(GLuint shader, string source, string tag);
 
 void checkError(string type, GLuint object);
 
-Shader::Shader(string vertexSource, string fragmentSource) {
+Shader::Shader(string vertexSourcePath, string fragmentSourcePath) {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    compileShader(vertexShader, vertexSource, "VERTEX");
-    compileShader(fragmentShader, fragmentSource, "FRAGMENT");
 
-    mProgram = glCreateProgram();
-    glAttachShader(mProgram, vertexShader);
-    glAttachShader(mProgram, fragmentShader);
-    glLinkProgram(mProgram);
+    ifstream vShaderFile, fShaderFile;
+    // 保证ifstream对象可以抛出异常：
+    vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    try {
+        vShaderFile.open(vertexSourcePath);
+        fShaderFile.open(fragmentSourcePath);
 
-    checkError("PROGRAM", mProgram);
+        std::stringstream vStream, fStream;
+        vStream << vShaderFile.rdbuf();
+        fStream << fShaderFile.rdbuf();
+
+        vShaderFile.close();
+        fShaderFile.close();
+
+        compileShader(vertexShader, vStream.str(), "VERTEX");
+        compileShader(fragmentShader, fStream.str(), "FRAGMENT");
+
+        mProgram = glCreateProgram();
+        glAttachShader(mProgram, vertexShader);
+        glAttachShader(mProgram, fragmentShader);
+        glLinkProgram(mProgram);
+
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+
+        checkError("PROGRAM", mProgram);
+    } catch (std::ifstream::failure e) {
+        cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
+    }
 }
 
 void Shader::use() {
