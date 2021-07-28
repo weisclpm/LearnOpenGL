@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-using std::ifstream;
 
 void compileShader(GLuint shader, string source, string tag);
 
@@ -13,7 +12,7 @@ Shader::Shader(string vertexSourcePath, string fragmentSourcePath) {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    ifstream vShaderFile, fShaderFile;
+    std::ifstream vShaderFile, fShaderFile;
     // 保证ifstream对象可以抛出异常：
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -42,7 +41,7 @@ Shader::Shader(string vertexSourcePath, string fragmentSourcePath) {
 
         checkError("PROGRAM", mProgram);
     } catch (std::ifstream::failure e) {
-        cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
+        cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ - " << e.what() << endl;
     }
 }
 

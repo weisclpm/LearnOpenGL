@@ -2,3 +2,4 @@ main.dSYM
 cmake-build-debug
 build/
 .idea
+.DS_Store
