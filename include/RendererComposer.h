@@ -6,14 +6,16 @@
 #include "Renderer.h"
 #include "STriangleRenderer.h"
 #include "vector"
+#include "TextureRenderer.h"
 using std::vector;
 
 class RendererComposer : public Renderer {
    public:
     RendererComposer() {
         addRenderer(new BackgroundRenderer());
-        addRenderer(new FTriangleRenderer());
-        addRenderer(new STriangleRenderer());
+        // addRenderer(new FTriangleRenderer());
+        // addRenderer(new STriangleRenderer());
+        addRenderer(new TextureRenderer());
     }
 
     void addRenderer(Renderer* renderer) {
